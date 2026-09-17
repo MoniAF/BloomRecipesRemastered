@@ -39,6 +39,8 @@ Route::post('/users/recoverpassword', [AuthController::class, 'recoverPassword']
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/users/logout', [AuthController::class, 'logout']);
 
+    Route::get('/users/likedrecipes', [AuthController::class, 'getLikedRecipes']);
+
     Route::post('/users/likes/{recipe}', [AuthController::class, 'likes'])
         ->whereNumber('recipe');
 

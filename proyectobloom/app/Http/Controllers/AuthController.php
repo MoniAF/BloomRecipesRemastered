@@ -67,6 +67,26 @@ class AuthController extends Controller
         ]);
     }
 
+    public function getLikedRecipes(Request $request)
+    {
+        $recipeIds = UsersVoteRecipe::where(
+            'users_id',
+            $request->user()->id
+        )
+            ->whereIn(
+                'recipes_id',
+                Recipe::where('status', 1)->select('id')
+            )
+            ->distinct()
+            ->pluck('recipes_id')
+            ->map(fn ($id) => (int) $id)
+            ->values();
+
+        return response()->json([
+            'recipe_ids' => $recipeIds,
+        ]);
+    }
+
     public function likes(Request $request, $recipe)
     {
         $userId = $request->user()->id;
