@@ -141,6 +141,10 @@ body{
     margin-right: auto;
     margin-top: -12px;
     margin-bottom: 10px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    line-clamp: 4;
     @include media-queries.respond-to(media-queries.$large-desktop){
         width: 187px;
         height: 58px;

@@ -57,7 +57,7 @@ const favoritesStore = useFavoritesStore()
 
                         <p class="category-card text-center categories-txt">{{ element.category }}</p>
 
-                        <p class="category-card text-center categories-txt">{{ element.difficulty }}</p>
+                        <p class="category-card text-center categories-txt">{{ element.difficulty?.replace(/\s+recipes$/i, '') }}</p>
 
                       </div>
                     </section>

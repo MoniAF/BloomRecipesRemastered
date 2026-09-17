@@ -116,7 +116,7 @@ watch(
                   </p>
                   <p class="description-card txt-description"> {{ element.description }} </p>
                   <p class="category-card text-center categories-txt"> {{ element.category }} </p>
-                  <p class="category-card text-center categories-txt"> {{ element.difficulty }} </p>
+                  <p class="category-card text-center categories-txt"> {{ element.difficulty?.replace(/\s+recipes$/i, '') }} </p>
                 </div>
               </section>
 

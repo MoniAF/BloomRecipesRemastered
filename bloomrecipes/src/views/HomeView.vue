@@ -1,5 +1,15 @@
 <script>
+import { useLikesStore } from '../stores/likes'
+import { useAuthStore } from '../stores/auth'
+
 export default {
+  setup() {
+    const likesStore = useLikesStore()
+    const authStore = useAuthStore()
+
+    return { likesStore, authStore }
+  },
+
   emits: ['openrecipes', 'showdetails', 'recipelike', 'recipeunlike'],
 
   props: {
@@ -97,6 +107,8 @@ export default {
 
                         <SaveRecipeButton :recipe-id="element.id" class="card-save-button"/>
 
+                        <LikeRecipeButton :recipe-id="element.id" :likes="element.likes" :show-count="false" class="card-like-button"/>
+
                         <section class="img-csz">
                             <img v-bind:src="element.image" class="img-card" :alt="element.name">
                         </section>
@@ -112,9 +124,9 @@ export default {
 
                                 <p class="category-card text-center categories-txt">{{ element.category }}</p>
 
-                                <p class="category-card text-center categories-txt">{{ element.difficulty }}</p>
+                                <p class="category-card text-center categories-txt">{{ element.difficulty?.replace(/\s+recipes$/i, '') }}</p>
 
-                                <p class="txt-likes text-center"><LikeRecipeButton :recipe-id="element.id" :likes="element.likes"/></p>
+                                <p class="txt-likes text-center"><span><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-heart-fill card-heart" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></span> {{ likesStore.countFor(element.id, element.likes) }} </p>
 
                             </div>
                         </section>
@@ -165,11 +177,11 @@ export default {
                                     <button type="button" class="recipe-title-button" @click="onClickShowDetails(element.id)"> {{ element.name }} </button>
                                 </p>
 
-                                <p class="description-card txt-description">{{ element.description }}...</p>
+                                <p class="description-card txt-description">{{ element.description }}</p>
 
                                 <p class="category-card text-center categories-txt">{{ element.category }}</p>
 
-                                <p class="category-card text-center categories-txt">{{ element.difficulty }}</p>
+                                <p class="category-card text-center categories-txt">{{ element.difficulty?.replace(/\s+recipes$/i, '') }}</p>
 
                             </div>
                         </section>
@@ -188,9 +200,15 @@ export default {
         </div>
 
         <div class="d-flex register-f">
-            <p class="mt-r">Register for free</p>
-            <RouterLink  v-if="online" :to="{ name: 'home' }" class="btn-register text-center text-decoration-none d-block">Sign Up</RouterLink> 
-            <RouterLink  v-else :to="{ name: 'register' }" class="btn-register text-center text-decoration-none d-block">Sign Up</RouterLink>
+
+            <template v-if="authStore.isAuthenticated">
+                <button type="button" class="btn-register btn-saved-recipes text-center d-block" data-bs-toggle="modal" data-bs-target="#favoritesModal"> My saved recipes </button>
+            </template>
+            <template v-else>
+                <p class="mt-r">Register for free</p>
+                <RouterLink :to="{ name: 'register' }" class="btn-register text-center text-decoration-none d-block"> Sign Up </RouterLink>
+            </template>
+
         </div>
 
     </div>

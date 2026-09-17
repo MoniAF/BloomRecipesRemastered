@@ -67,7 +67,7 @@ const newestRecipes = computed(() => props.recipes.slice(-5))
 
                       <p class="category-card text-center categories-txt"> {{ element.category }} </p>
 
-                      <p class="category-card text-center categories-txt"> {{ element.difficulty }} </p>
+                      <p class="category-card text-center categories-txt"> {{ element.difficulty?.replace(/\s+recipes$/i, '') }} </p>
 
                     </div>
                   </section>

@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import api, { BACKEND_URL } from '../services/api'
 import { useFavoritesStore } from '../stores/favorites'
+import { useLikesStore } from '../stores/likes'
 
 const props = defineProps({
   id: {
@@ -19,6 +20,7 @@ const loading = ref(true)
 const errorMessage = ref('')
 const retryCount = ref(0)
 const favoritesStore = useFavoritesStore()
+const likesStore = useLikesStore()
 
 function imageUrl(image) {
   return image
@@ -186,6 +188,8 @@ watch(
 
                   <SaveRecipeButton :recipe-id="element.id" class="card-save-button"/>
 
+                  <LikeRecipeButton :recipe-id="element.id" :likes="element.likes" :show-count="false" class="card-like-button"/>
+
                   <section class="img-csz">
                     <img v-if="element.image" :src="element.image" class="img-card" :alt="element.name">
                   </section>
@@ -198,8 +202,8 @@ watch(
                         <button type="button" class="recipe-title-button" @click="emit('showdetails', element.id)"> {{ element.name }} </button>
                       </p>
                       <p class="category-card text-center categories-txt"> {{ element.category }} </p>
-                      <p class="category-card text-center categories-txt"> {{ element.level }} </p>
-                      <p class="txt-likes text-center"><LikeRecipeButton :recipe-id="element.id" :likes="element.likes"/></p>
+                      <p class="category-card text-center categories-txt"> {{ (element.level ?? '').replace(/\s+recipes\s*$/i, '') }} </p>
+                      <p class="txt-likes text-center"><span><svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-heart-fill card-heart" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/></svg></span> {{ likesStore.countFor(element.id, element.likes) }} </p>
                     </div>
                   </section>
 
